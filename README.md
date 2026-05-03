@@ -1,5 +1,22 @@
 # Evaluating Reasoning Models for Queries with Presuppositions 
 
+
+## Data
+
+Three datasets live under `data/`, each containing queries derived from factual claims at five presupposition levels (0–4). Level 0 is a neutral question with no embedded assumption; each subsequent level encodes the claim more assertively into the query phrasing.
+
+| Dataset | Path | Format | `--dataset` value |
+|---|---|---|---|
+| UPHILL | `data/uphill/queries.csv` | CSV | `uphill` |
+| FoolMeTwice | `data/foolme2/queries.jsonl` | JSONL | `foolmetwice` |
+| SciFact | `data/scifact/queries.jsonl` | JSONL | `scifact` |
+
+Each entry has a `claim`, a `label` (whether the claim is true/false depending on the dataset), a `presupposition_level`, and the corresponding `query` text to be sent to the model.
+
+We also provide our raw results and outputs [here](https://drive.google.com/drive/folders/1dMNW053JNn5GzodNlWkPZ8ylMnzV_QhU?usp=sharing).
+
+---
+
 ## Setup
 
 Requires Python 3.10+. Dependencies are managed with [uv](https://docs.astral.sh/uv/).
@@ -144,3 +161,9 @@ uv run python -m equip.main generate \
   --log-level DEBUG \
   --log-file run.log
 ```
+
+---
+
+## Contact
+
+If you have any questions, please email roshans [at] iisc [dot] ac [dot] in. Thanks!
