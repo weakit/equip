@@ -1,0 +1,194 @@
+models:
+  # GPT-OSS 20B 
+  gpt-oss-20b-off:
+    # 'backend' specifies the generator execution engine
+    backend: vllm
+    # 'type' indicates this is a generator model entry
+    type: generator
+    # 'model_path' is the HuggingFace hub id or local absolute path to the weights
+    model_path: "openai/gpt-oss-20b"
+    # 'parameters' are passed directly to the generator backend initialized
+    parameters:
+      # 'batch_size' controls how many concurrent requests are batched 
+      batch_size: 1024
+      # other generation parameters
+      temperature: 0.7
+      max_tokens: 2048
+
+  gpt-oss-20b-low:
+    backend: vllm
+    type: generator
+    model_path: "openai/gpt-oss-20b"
+    parameters:
+      batch_size: 1024
+      temperature: 0.8
+      max_tokens: 4096
+
+  gpt-oss-20b-medium:
+    backend: vllm
+    type: generator
+    model_path: "openai/gpt-oss-20b"
+    parameters:
+      batch_size: 1024
+      temperature: 0.9
+      max_tokens: 8192
+
+  # Qwen 3 8B Configurations
+  qwen3-8b-no-thinking:
+    backend: vllm
+    type: generator
+    model_path: "Qwen/Qwen3-8b"
+    # 'preprocessor' defines how prompts are formatted before hitting the model
+    preprocessor:
+      type: qwen
+      config:
+        # toggles the internal Qwen thinking/reasoning framework prompt formatting
+        enable_thinking: false
+    # 'postprocessor' defines how the output (and thinking tokens) are extracted
+    postprocessor:
+      type: qwen
+    parameters:
+      # 'tensor_parallel_size' configures distributed inference across GPUs
+      tensor_parallel_size: 2
+      batch_size: 1024
+
+  qwen3-8b-thinking:
+    backend: vllm
+    type: generator
+    model_path: "Qwen/Qwen3-8b"
+    preprocessor:
+      type: qwen
+      config:
+        enable_thinking: true
+    postprocessor:
+      type: qwen
+    parameters:
+      tensor_parallel_size: 2
+      batch_size: 1024
+
+  # Qwen 3 32B Configurations
+  qwen3-32b-no-thinking:
+    backend: vllm
+    type: generator
+    model_path: "Qwen/Qwen3-32b"
+    preprocessor:
+      type: qwen
+      config:
+        enable_thinking: false
+    postprocessor:
+      type: qwen
+    parameters:
+      tensor_parallel_size: 4
+      batch_size: 1024
+
+  qwen3-32b-thinking:
+    backend: vllm
+    type: generator
+    model_path: "Qwen/Qwen3-32b"
+    preprocessor:
+      type: qwen
+      config:
+        enable_thinking: true
+    postprocessor:
+      type: qwen
+    parameters:
+      tensor_parallel_size: 4
+      batch_size: 1024
+
+  # GPT-5 Mini Configurations (OpenAI Backend)
+  gpt-5-mini-minimal:
+    backend: openai_batch
+    type: generator
+    model_path: "gpt-5-mini"
+    parameters:
+      reasoning_effort: "low"
+      batch_size: 512
+
+  gpt-5-mini-medium:
+    backend: openai_batch
+    type: generator
+    model_path: "gpt-5-mini"
+    parameters:
+      reasoning_effort: "medium"
+      batch_size: 512
+
+  # Gemini 2.5 Flash
+  gemini-2.5-flash-no-thinking:
+    backend: gemini
+    type: generator
+    model_path: "gemini-2.5-flash"
+    parameters:
+      thinking_budget: 0
+      batch_size: 100
+
+  gemini-2.5-flash-thinking:
+    backend: gemini
+    type: generator
+    model_path: "gemini-2.5-flash"
+    parameters:
+      thinking_budget: 2048
+      batch_size: 100
+
+  # Gemini 2.5 Pro 
+  gemini-2.5-pro-no-thinking:
+    backend: gemini
+    type: generator
+    model_path: "gemini-2.5-pro"
+    parameters:
+      thinking_budget: 0
+      batch_size: 100
+
+  gemini-2.5-pro-thinking:
+    backend: gemini
+    type: generator
+    model_path: "gemini-2.5-pro"
+    parameters:
+      thinking_budget: 2048
+      batch_size: 100
+    
+
+  # Evaluator models
+  # these models can be used as an entailment judge.
+  gpt-oss-20b-entailment:
+    backend: vllm
+    type: evaluator
+    model_path: "openai/gpt-oss-20b"
+    
+    preprocessor:
+      type: harmony
+      config:
+        harmony_encoding_name: "HARMONY_GPT_OSS"
+        reasoning_level: "medium"
+    
+    postprocessor:
+      type: harmony
+      config:
+        harmony_encoding_name: "HARMONY_GPT_OSS"
+    
+    parameters:
+      data_parallel_size: 1
+      pipeline_parallel_size: 1
+      tensor_parallel_size: 1
+      batch_size: 2048
+      temperature: 1
+      max_tokens: 16384
+  
+  qwen3-8b-thinking-entailment:
+    backend: vllm
+    type: evaluator
+    model_path: "Qwen/Qwen3-8b"
+
+    preprocessor:
+      type: qwen
+      config:
+        enable_thinking: false
+
+    postprocessor:
+      type: qwen
+
+    parameters:
+      tensor_parallel_size: 2
+      batch_size: 2048
+      temperature: 0.7
+      system_prompt: null
+      gpu_memory_utilization: 0.85

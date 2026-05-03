@@ -1,0 +1,42 @@
+[project]
+name = "equip"
+version = "2.0.0"
+description = "Modern evaluation framework for LLM benchmarks"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.0.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+    "rich>=13.0.0",
+    "matplotlib>=3.7.0",
+    "scikit-learn>=1.3.0",
+    "nanoid>=2.0.0",
+    "vllm>=0.4.0",
+    "openai-harmony>=0.1.0",
+    "gradio>=4.0.0",
+    "openai>=1.0.0",
+    "google-genai>=0.3.0",
+    "python-dotenv>=1.0.0",
+    "sglang>=0.1.0",
+    "transformers>=4.0.0",
+    "scipy>=1.10.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
